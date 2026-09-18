@@ -1,0 +1,21 @@
+{
+	"name": "DS_Destino_Landing",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "tipo_cambio_bcrp.json",
+				"folderPath": "datos_crudos/landing",
+				"fileSystem": "lakehouse"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,15 @@
+{
+	"name": "adf-proyecto-jhon",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "61d2cdb7-02b4-4480-abca-a1c7288556d5",
+		"tenantId": "a16dfff8-c204-43d7-a92e-ecfa19b2a260"
+	}
+}

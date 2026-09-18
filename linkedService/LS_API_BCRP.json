@@ -1,0 +1,13 @@
+{
+	"name": "LS_API_BCRP",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04637PD/json/2024-01-01/2024-12-31",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}
