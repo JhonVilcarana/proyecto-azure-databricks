@@ -41,10 +41,18 @@ pipeline {
                     sh '''
                     echo "Conectando con el Workspace de Databricks..."
                     
-                    # Extraemos el ID usando un método 100% compatible con Groovy y Linux
-                    REPO_ID=$(curl -s -X GET \
+                    # 1. Guardamos la respuesta CRUDA de Databricks
+                    RESPUESTA_API=$(curl -s -X GET \
                         -H "Authorization: Bearer $DATABRICKS_TOKEN" \
-                        "$DATABRICKS_HOST/api/2.0/repos" | grep -o '"id": *[0-9]*' | head -1 | tr -dc '0-9')
+                        "$DATABRICKS_HOST/api/2.0/repos")
+                        
+                    # 2. Imprimimos la respuesta en la consola para ver qué está pasando
+                    echo "=== RESPUESTA DE DATABRICKS ==="
+                    echo "$RESPUESTA_API"
+                    echo "==============================="
+                    
+                    # 3. Extraemos el ID
+                    REPO_ID=$(echo "$RESPUESTA_API" | grep -o '"id": *[0-9]*' | head -1 | tr -dc '0-9')
                     
                     echo "-> ID de Carpeta Databricks detectado: $REPO_ID"
                     
