@@ -41,10 +41,10 @@ pipeline {
                     sh '''
                     echo "Conectando con el Workspace de Databricks..."
                     
-                    # 1. Extraemos el ID del repositorio limpiando cualquier espacio o carácter extra
+                    # 1. Eliminamos todos los espacios (tr -d) para que el formato siempre sea "id":numero
                     REPO_ID=$(curl -s -X GET \
                         -H "Authorization: Bearer $DATABRICKS_TOKEN" \
-                        "$DATABRICKS_HOST/api/2.0/repos" | grep -o -E '"id": ?[0-9]+' | head -1 | tr -dc '0-9')
+                        "$DATABRICKS_HOST/api/2.0/repos" | tr -d ' \n' | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
                     
                     echo "-> ID de Carpeta Databricks detectado: $REPO_ID"
                     
@@ -55,12 +55,12 @@ pipeline {
                     
                     echo "-> Ordenando a Databricks que extraiga (Pull) el código de GitHub..."
                     
-                    # 2. Enviamos la orden de actualización y MOSTRAMOS la respuesta
+                    # 2. Enviamos la orden de actualización a ese ID exacto
                     curl -s -X PATCH \
                         -H "Authorization: Bearer $DATABRICKS_TOKEN" \
                         -H "Content-Type: application/json" \
                         -d '{"branch": "main"}' \
-                        "$DATABRICKS_HOST/api/2.0/repos/$REPO_ID"
+                        "$DATABRICKS_HOST/api/2.0/repos/$REPO_ID" > /dev/null
                         
                     echo "\\n\\n✅ ¡ÉXITO TOTAL! Todo tu código está sincronizado en producción."
                     '''
