@@ -22,7 +22,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/jhonvilcarana@outlook.com/01_bronce"
+					"notebookPath": "/Users/jhonvilcarana@outlook.com/proyecto-azure-databricks/01_bronce"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
@@ -49,7 +49,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/jhonvilcarana@outlook.com/02_plata"
+					"notebookPath": "/Users/jhonvilcarana@outlook.com/proyecto-azure-databricks/02_plata"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
@@ -76,7 +76,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/jhonvilcarana@outlook.com/03_oro"
+					"notebookPath": "/Users/jhonvilcarana@outlook.com/proyecto-azure-databricks/03_oro"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
