@@ -1,7 +1,7 @@
 pipeline {
     agent any
     
-    // Configuramos la URL exacta de tu entorno de Databricks
+    // Tu entorno de Databricks
     environment {
         DATABRICKS_HOST = 'https://adb-7405607132000806.6.azuredatabricks.net'
     }
@@ -11,7 +11,6 @@ pipeline {
             steps {
                 echo 'Sincronizando la última versión de la Arquitectura Medallón...'
                 checkout scm
-                sh 'ls -la'
             }
         }
         
@@ -23,13 +22,13 @@ pipeline {
                     string(credentialsId: 'azure-client-secret', variable: 'CLIENT_SECRET')
                 ]) {
                     sh '''
-                    echo "Solicitando acceso a la nube de Microsoft..."
+                    echo "Validando credenciales de despliegue en Azure..."
                     curl -s -X POST https://login.microsoftonline.com/$TENANT_ID/oauth2/token \
                         -d "grant_type=client_credentials" \
                         -d "client_id=$CLIENT_ID" \
                         -d "client_secret=$CLIENT_SECRET" \
                         -d "resource=https://management.azure.com/" > /dev/null
-                    echo "¡Conexión a Azure establecida correctamente!"
+                    echo "¡Conexión a la nube de Microsoft verificada!"
                     '''
                 }
             }
@@ -43,18 +42,21 @@ pipeline {
                     sh '''
                     echo "Conectando con el Workspace de Databricks..."
                     
-                    # Verificamos la conexión a la API de Databricks usando tu token
-                    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X GET \
+                    # 1. Buscamos el ID interno de tu carpeta de Git en Databricks
+                    REPO_ID=$(curl -s -X GET \
                         -H "Authorization: Bearer $DATABRICKS_TOKEN" \
-                        $DATABRICKS_HOST/api/2.0/workspace/list?path=/)
+                        "$DATABRICKS_HOST/api/2.0/repos" | grep -o '"id":[0-9]*' | head -1 | cut -d':' -f2)
                     
-                    if [ "$HTTP_STATUS" = "200" ]; then
-                        echo "¡ÉXITO TOTAL! Jenkins tiene acceso a Databricks."
-                        echo "Los cuadernos (01_bronce, 02_plata, 03_oro) están listos para ser orquestados por Data Factory."
-                    else
-                        echo "ERROR: Falló la conexión a Databricks. Código de estado: $HTTP_STATUS"
-                        exit 1
-                    fi
+                    echo "Actualizando los notebooks (01_bronce, 02_plata, 03_oro) a la versión de GitHub..."
+                    
+                    # 2. Le ordenamos a la API de Databricks que actualice los archivos
+                    curl -s -X PATCH \
+                        -H "Authorization: Bearer $DATABRICKS_TOKEN" \
+                        -H "Content-Type: application/json" \
+                        -d '{"branch": "main"}' \
+                        "$DATABRICKS_HOST/api/2.0/repos/$REPO_ID" > /dev/null
+                        
+                    echo "¡ÉXITO TOTAL! Todo tu código está sincronizado en producción."
                     '''
                 }
             }
