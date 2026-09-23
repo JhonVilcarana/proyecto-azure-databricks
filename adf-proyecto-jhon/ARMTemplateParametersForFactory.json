@@ -1,0 +1,24 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-proyecto-jhon"
+		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
+		"LS_DataLake_accountKey": {
+			"value": ""
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "0916-212150-p1ojmaaq"
+		},
+		"LS_API_BCRP_properties_typeProperties_url": {
+			"value": "https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04638PD-PD04637PD/json/2022-01-01/2026-06-30"
+		},
+		"LS_DataLake_properties_typeProperties_url": {
+			"value": "https://datalakejhon2026.dfs.core.windows.net/"
+		}
+	}
+}
